@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{fragments/head :: headload}"></th:block>
+  <title>Quiz Manager</title>
+</head>
+<body class="app sidebar-mini">
+<th:block th:replace="fragments/teacher_sidebar :: sidebar"></th:block>
+
+<main class="app-content">
+  <div class="app-title" style="position: sticky; top: 52px; z-index: 1020">
+    <div>
+      <h1><i class="bi bi-file-earmark-text"></i> <span th:text="${quiz.quizName}"></span></h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <form th:action="@{/quiz/manager(method='done_edit')}" method="post" onsubmit="return validateQuiz()">
+      <input type="hidden" name="quizid" th:value="${quiz.quizId}" />
+
+      <div class="tile">
+        <h3 class="tile-title">Update Quiz</h3>
+        <div class="tile-body">
+          <div id="form-error" class="text-danger mb-3"></div>
+
+          <div class="row">
+            <div class="col mb-3">
+              <label class="form-label">Quiz Name</label>
+              <input type="text" class="form-control" name="quizName" placeholder="Enter quiz name" th:value="${quiz.quizName}" required />
+            </div>
+          </div>
+
+          <div id="questions-container">
+            <div th:each="question, qStat : ${quiz.questions}" class="tile mt-3" th:id="'question-' + ${question.questionId}">
+              <div class="tile-body">
+                <input type="text" class="form-control mb-3 question-input"
+                       th:name="'question-' + ${question.questionId}"
+                       placeholder="Enter question"
+                       th:value="${question.content}" required />
+
+                <div th:id="'choices-container-' + ${question.questionId}">
+                  <div th:each="choice : ${question.choices}"
+                       class="d-flex align-items-center mt-2"
+                       th:id="'choice-' + ${choice.choiceId}">
+                    <input type="text"
+                           class="form-control me-2 choice-input"
+                           th:name="'choice-' + ${question.questionId} + '-' + ${choice.choiceId}"
+                           placeholder="Enter choice"
+                           th:value="${choice.choiceContent}" required />
+
+                    <div class="form-check me-2">
+                      <input type="checkbox"
+                             class="form-check-input"
+                             th:name="'correct-' + ${question.questionId} + '-' + ${choice.choiceId}"
+                             th:checked="${choice.correctChoice}" />
+                    </div>
+
+                    <button class="btn btn-sm btn-outline-danger ms-2"
+                            type="button"
+                            th:onclick="'removeChoice(' + '\'' + ${choice.choiceId} + '\'' + ')'"
+                            style="width: 75px;">
+                      Remove
+                    </button>
+                  </div>
+                </div>
+
+                <div class="error-message text-danger mt-2"></div>
+
+                <div class="d-flex mt-2">
+                  <button class="btn btn-sm btn-success me-2"
+                          type="button"
+                          th:onclick="'addChoice(' + '\'' + ${question.questionId} + '\'' + ')'"
+                          style="width: 150px;">
+                    <i class="bi bi-plus-circle me-1"></i> Add Choice
+                  </button>
+
+                  <button class="btn btn-sm btn-danger"
+                          type="button"
+                          th:onclick="'removeQuestion(' + '\'' + ${question.questionId} + '\'' + ')'"
+                          style="width: 150px;">
+                    <i class="bi bi-trash-fill me-1"></i> Remove Question
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tile-footer d-flex">
+          <button class="btn btn-primary me-2"
+                  type="button"
+                  onclick="addQuestion()"
+                  style="width: 150px;">
+            <i class="bi bi-plus-lg me-1"></i> Add Question
+          </button>
+          <button class="btn btn-success"
+                  type="submit"
+                  style="width: 150px;">
+            <i class="bi bi-save me-1"></i> Save Quiz
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>
+
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+<script th:src="@{/js/quiz-create.js}"></script>
+</body>
+</html>

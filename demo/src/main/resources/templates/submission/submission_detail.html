@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/head :: headload}"></th:block>
+    <title>Quiz Manager</title>
+    <style>
+        .choice-item input.selected-choice {
+            border: 2px solid #6ba8ff !important;
+            background-color: #e3f0ff;
+        }
+        .correct-icon {
+            color: green;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .question.correct {
+            border: 3px solid green;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .question.wrong {
+            border: 3px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body class="app sidebar-mini">
+
+<!-- Sidebar -->
+<th:block th:if="${role == 'teacher'}">
+    <th:block th:replace="fragments/teacher_sidebar :: sidebar"></th:block>
+</th:block>
+<th:block th:if="${role == 'student'}">
+    <th:block th:replace="fragments/student_sidebar :: sidebar"></th:block>
+</th:block>
+
+<main class="app-content">
+    <div class="app-title" style="position: sticky; top: 52px; z-index: 1020">
+        <div>
+            <h1><i class="bi bi-laptop"></i> Submission Detail</h1>
+            <p>An online web for creating and taking exams</p>
+        </div>
+    </div>
+    <div class="row">
+        <!-- Left panel -->
+        <div class="col-md-3">
+            <div class="tile" style="position: sticky; top: 170px; z-index: 1010">
+                <div class="card text-center p-3 bg-light">
+                    <h5 class="mb-0">
+                        <i class="bi bi-person-circle"></i>
+                        <span th:text="${studentName}"></span>
+                    </h5>
+                </div>
+                <ul class="list-group mt-3">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <i class="bi bi-list-task"></i> Total Questions
+                        <span class="badge bg-secondary" th:text="${questions.size()}"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <i class="bi bi-check2-square"></i> Selected Questions
+                        <span class="badge bg-secondary" th:text="${submission.selected}"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <i class="bi bi-patch-check-fill"></i> Correct Answers
+                        <span class="badge bg-success" th:text="${submission.correctAnswers}"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <i class="bi bi-trophy"></i> Score
+                        <span class="badge bg-primary" th:text="${submission.score}"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <i class="bi bi-clock"></i> Duration
+                        <span class="badge bg-warning" th:text="${submission.duration}"></span>
+                    </li>
+                </ul>
+
+                <div class="alert alert-info mt-3">
+                    <h6><i class="bi bi-info-circle"></i> Answer Key Guide</h6>
+                    <ul class="list-unstyled mt-3">
+                        <li class="mb-2">
+                            <span class="badge bg-success px-3 py-2" style="width: 40px;">&nbsp;</span> Correct Answer
+                        </li>
+                        <li class="mb-2">
+                            <span class="badge bg-danger px-3 py-2" style="width: 40px;">&nbsp;</span> Wrong Answer
+                        </li>
+                        <li class="mb-2">
+                            <span class="badge" style="background-color: #6ba8ff; color: white; padding: 8px 12px; width: 40px;">&nbsp;</span> Selected Answer
+                        </li>
+                        <li class="mt-2">
+                            <span class="text-success fw-bold">&#10003;</span> Keys
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right panel -->
+        <div class="col-md-9">
+            <div class="tile">
+                <div class="tile-body">
+                    <div th:each="answer, index : ${answers}">
+                        <div th:with="question=${questions[answer.question.questionId]}">
+                            <div class="tile mt-3 question"
+                                 th:classappend="${answer.correct} ? 'correct' : 'wrong'">
+                                <div class="tile-body">
+                                    <h5 class="fw-bold">Question <span th:text="${index.index + 1}"></span>:</h5>
+                                    <input type="text"
+                                           class="form-control mb-3 fw-bold"
+                                           th:value="${question.content}"
+                                           disabled />
+
+                                    <div th:each="choice : ${question.choices}" class="row mt-2 choice-item">
+                                        <div class="col-11">
+                                            <input type="text"
+                                                   class="form-control"
+                                                   th:classappend="${#strings.contains(answer.studentChoice, choice.choiceId)} ? ' selected-choice' : ''"
+                                                   th:value="${choice.choiceContent}"
+                                                   disabled />
+                                        </div>
+                                        <div class="col-1 d-flex align-items-center"
+                                             th:if="${choice.correctChoice}">
+                                            <span class="correct-icon">&#10003;</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div> <!-- /with -->
+                    </div> <!-- /each -->
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+</body>
+</html>

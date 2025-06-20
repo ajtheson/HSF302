@@ -1,24 +1,25 @@
+--bd94dcda26fccb4e68d6a31f9b5aac0b571ae266d822620e901ef7ebe3a11d4f
 use QuizOnlineSystem
 -- Insert Teachers
-INSERT INTO Teacher (email, password, fullname, school) VALUES
-('teacher1@example.com', 'pass123', 'Nguyen Van A', 'High School A'),
+INSERT INTO teacher_entity(email, password, full_name, school) VALUES
+('nguyentheson27102005@gmail.com', 'bd94dcda26fccb4e68d6a31f9b5aac0b571ae266d822620e901ef7ebe3a11d4f', 'Nguyen Van A', 'High School A'),
 ('teacher2@example.com', 'pass456', 'Tran Thi B', 'High School B');
 
 -- Insert Students
-INSERT INTO Student (email, password, fullname, className, school) VALUES
-('student1@example.com', 'pass123', 'Le Van C', '12A1', 'High School A'),
+INSERT INTO student_entity(email, password, full_name, class_name, school) VALUES
+('nguyentheson27102005@gmail.com', 'bd94dcda26fccb4e68d6a31f9b5aac0b571ae266d822620e901ef7ebe3a11d4f', 'Le Van C', '12A1', 'High School A'),
 ('student2@example.com', 'pass456', 'Pham Thi D', '12A2', 'High School B'),
 ('student3@example.com', 'pass789', 'Nguyen Van E', '12A3', 'High School C'),
 ('student4@example.com', 'pass012', 'Tran Thi F', '12A4', 'High School D'),
 ('student5@example.com', 'pass345', 'Hoang Van G', '12A1', 'High School A');
 
 -- Insert Quizzes
-INSERT INTO Quiz (quizName, quantity, isDeleted, teacherID) VALUES
+INSERT INTO quiz_entity (quiz_name, quantity, is_deleted, teacher_id) VALUES
 ('SSLc101', 5, 0, 1),
 ('PRF192', 5, 0, 2);
 
 -- Insert Questions
-INSERT INTO Question (content, isMultipleChoice, isDeleted,quizID) VALUES
+INSERT INTO question_entity (content, is_multiple_choice, is_deleted,quiz_id) VALUES
 ('How is bias displayed in this statement?', 0, 0,1),
 ('According to the lesson, how long does it take to master communication skills?', 0,0, 1),
 ('Taking notes during lectures is an effective way that helps students get the most out of their courses. So, what should students note down? (Choose 2)', 1,0, 1),
@@ -31,7 +32,7 @@ INSERT INTO Question (content, isMultipleChoice, isDeleted,quizID) VALUES
 ('Which of the following accurately describes the scope of a local variable in C?', 0,0, 2);
 
 -- Insert Choices
-INSERT INTO Choice (choiceContent, isCorrectChoice, isDeleted,questionID) VALUES
+INSERT INTO choice_entity(choice_content, is_correct_choice, is_deleted,question_id) VALUES
 ('False classification schemes', 0, 0,1),
 ('Use of passive voice to hide responsibility', 1, 0,1),
 ('Ad hominem', 0, 0,1),
@@ -74,13 +75,13 @@ INSERT INTO Choice (choiceContent, isCorrectChoice, isDeleted,questionID) VALUES
 ('It is available globally but with restricted modification rights', 0, 0, 10);
 
 -- Insert Exams
-INSERT INTO Exam (examCode, examName, duration, startTime, endTime, attempts, isReview, quizID) VALUES
+INSERT INTO exam_entity (exam_code, exam_name, duration, start_time, end_time, attempts, is_review, quiz_id) VALUES
 ('12345', 'SSLc101_1', 10,'2025-02-19 08:00:00', '2025-02-19 09:00:00',2, 1, 1),
 ('23456', 'SSLc101_2', 10,'2025-02-19 10:00:00', '2025-02-19 11:00:00',3, 0, 1),
 ('34567', 'PRF192_1', 10,'2025-02-19 09:00:00', '2025-02-19 20:00:00',1, 1, 2);
 
 -- Insert Submissions
-INSERT INTO Submission (submitTime, duration, selected, correctAnswers, score, isSubmit, studentID, examID) VALUES
+INSERT INTO submission_entity (submit_time, duration, selected, correct_answers, score, is_submit, student_id, exam_id) VALUES
 ('2025-02-19 08:50:00', 5, 5, 4, 8.0,1, 1, 1), -- Student 1 _ SSLc101_1    1
 ('2025-02-19 08:50:00', 5, 5, 3, 6.0,1, 2, 1), -- Student 2 _ SSLc101_1    2
 ('2025-02-19 08:50:00', 5, 4, 3, 6.0,1, 3, 1), -- Student 3 _ SSLc101_1    3
@@ -90,7 +91,7 @@ INSERT INTO Submission (submitTime, duration, selected, correctAnswers, score, i
 ('2025-02-19 11:55:00', 6, 5, 3, 6.0,1, 2, 3); -- Student 2 _ PRF192_1
 
 
-INSERT INTO Answer (studentChoice, isCorrect, questionID, submissionID) VALUES
+INSERT INTO answer_entity(student_choice, is_correct, question_id, submission_id) VALUES
 
 ('2', 1, 1, 1), 
 ('8', 1, 2, 1), 

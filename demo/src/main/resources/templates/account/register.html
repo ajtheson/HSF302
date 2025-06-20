@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <!-- Thay include headload.jsp bằng th:replace nếu bạn đã chuyển nó sang Thymeleaf -->
+    <th:block th:replace="~{fragments/head :: headload}"></th:block>
+</head>
+<body>
+<section class="material-half-bg">
+    <div class="cover"></div>
+</section>
+
+<div class="back-to-login">
+    <button class="btn btn-secondary" type="button"
+            th:onclick="|location.href='/account/login'|">
+        <i class="bi bi-arrow-left-circle"></i> Sign in
+    </button>
+</div>
+
+<section class="register-content">
+    <div style="color: #fff">
+        <h4>REGISTER A NEW ACCOUNT</h4>
+    </div>
+    <div style="color: #fff">
+        <p>Select a role to continue</p>
+    </div>
+    <div class="role-choice">
+        <div class="register-box">
+            <div class="register-form">
+                <div>
+                    <img th:src="@{/images/teacher-illustration.png}" alt="A illustration of teacher" />
+                </div>
+                <div class="mb-3 btn-container d-grid">
+                    <button class="btn btn-primary btn-block"
+                            th:onclick="|location.href='/account/register_teacher'|">
+                        <i class="bi bi-person-badge"></i> I am a teacher
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="register-box">
+            <div class="register-form">
+                <div>
+                    <img th:src="@{/images/student-illustration.png}" alt="A illustration of student" />
+                </div>
+                <div class="mb-3 btn-container d-grid">
+                    <button class="btn btn-primary btn-block"
+                            th:onclick="|location.href='/account/register_student'|">
+                        <i class="bi bi-mortarboard"></i> I am a student
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+</body>
+</html>

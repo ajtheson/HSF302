@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/head :: headload}"></th:block>
+    <title>Exam Statistic</title>
+</head>
+<body class="app sidebar-mini">
+<th:block th:replace="fragments/teacher_sidebar :: sidebar"></th:block>
+
+<main class="app-content">
+    <div class="app-title" style="position: sticky; top: 52px; z-index: 1020">
+        <div>
+            <h1><i class="bi bi-laptop"></i> Exams</h1>
+            <p>An online web for creating and taking exams</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="tile" style="position: sticky; top: 170px; z-index: 1010">
+                <button class="btn btn-secondary w-100 mb-3"
+                        th:onclick="'location.href=\'/exam/on_going_detail?method=view&examid=' + ${examid} + '\''">
+                    Show All Submissions
+                </button>
+                <button class="btn btn-secondary w-100 mb-3"
+                        th:onclick="'location.href=\'/exam/on_going_detail?method=submitted&examid=' + ${examid} + '\''">
+                    Submitted
+                </button>
+                <button class="btn btn-secondary w-100"
+                        th:onclick="'location.href=\'/exam/on_going_detail?method=unsubmitted&examid=' + ${examid} + '\''">
+                    Unsubmitted
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="tile">
+                <h3 class="tile-title" th:text="${examName}">Exam Name</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Email</th>
+                        <th>Full Name</th>
+                        <th>Score</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="s, stat : ${submissions}">
+                        <td th:text="${stat.count}">1</td>
+                        <td th:text="${studentInfo[s.submissionId]?.email}">email@example.com</td>
+                        <td th:text="${studentInfo[s.submissionId]?.fullName}">Full Name</td>
+
+                        <td th:if="${s.isSubmit}" th:text="${s.score}"></td>
+                        <td th:if="${!s.isSubmit}" style="color: red">Unsubmitted</td>
+
+                        <td>
+                            <a th:if="${s.isSubmit}"
+                               th:href="@{/submission/detail(submissionid=${s.submissionId})}"
+                               class="btn btn-primary" style="width: 90px">Details</a>
+
+                            <form th:if="${!s.isSubmit}" th:action="@{/exam/force_submit}" method="post" style="display: inline;">
+                                <input type="hidden" name="submissionID" th:value="${s.submissionId}"/>
+                                <button type="submit" class="btn btn-danger" style="width: 90px"
+                                        onclick="return confirm('Are you sure you want to end this submission?')">
+                                    End now
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+</body>
+</html>

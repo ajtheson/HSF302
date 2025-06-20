@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{fragments/head :: headload}"></th:block>
+  <title>Question Statistic</title>
+</head>
+<body class="app sidebar-mini">
+<th:block th:replace="fragments/teacher_sidebar :: sidebar"></th:block>
+<main class="app-content">
+  <div class="app-title" style="position: sticky; top: 52px; z-index: 1020">
+    <div>
+      <h1><i class="bi bi-laptop"></i> Exams</h1>
+      <p>An online web for creating and taking exams</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Left Sidebar: Search + Stats -->
+    <div class="col-md-3">
+      <div class="tile" style="position: sticky; top: 170px; z-index: 1010">
+        <label for="search" class="mb-2">Search by email or name:</label>
+        <form th:action="@{/exam/question_statistic}" method="get">
+          <input type="hidden" name="questionID" th:value="${questionID}" />
+          <input type="hidden" name="examID" th:value="${examID}" />
+          <div class="input-group mb-2">
+            <input
+                    id="search"
+                    type="search"
+                    name="search"
+                    class="form-control form-control-sm"
+                    placeholder="Email or Name"
+                    required />
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+        <button id="reset-search" class="btn btn-secondary w-100 mb-3"
+                th:onclick="'location.href=\'' + @{/exam/question_statistic(questionID=${questionID}, examID=${examID})} + '\''">
+          Show All
+        </button>
+        <ul class="list-group mt-3">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <i class="bi bi-file-earmark-text"></i> Total Selected
+            <span class="badge bg-secondary" th:text="${selected}"></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <i class="bi bi-bar-chart"></i> Correct
+            <span class="badge bg-secondary" th:text="${correct}"></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <i class="bi bi-trophy"></i> Incorrect
+            <span class="badge bg-secondary" th:text="${incorrect}"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right Content -->
+    <div class="col-md-9">
+      <div class="tile-body">
+        <!-- Display question and choices -->
+        <div class="tile mt-3">
+          <div class="tile-body">
+            <input
+                    type="text"
+                    class="form-control mb-3 fw-bold"
+                    th:value="${question.content}" />
+            <div>
+              <div th:each="choice : ${question.choices}">
+                <div class="d-flex align-items-center mt-2 choice-item">
+                  <input
+                          type="text"
+                          class="form-control me-2"
+                          th:style="${choice.correctChoice} ? 'border: 2px solid darkgreen' : ''"
+                          th:value="${choice.choiceContent}" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Display each student’s answer -->
+      <div th:each="entry : ${choiceList}">
+        <div class="tile-body">
+          <div>
+            <div class="tile mt-3"
+                 th:style="${corrects[entry.key]} ? 'border: solid green 2px' : 'border: solid red 2px'">
+              <div class="tile-body">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="fw-bold text-primary" th:text="${student.get(entry.key).getEmail()}"></span>
+                  <span class="fw-bold text-dark" th:text="${student.get(entry.key).getFullName()}"></span>
+                </div>
+                <div class="mt-2">
+                  <div th:if="${#lists.isEmpty(entry.value)}">
+                    <div class="d-flex align-items-center mt-2 choice-item text-muted bg-light p-2 rounded">
+                      <i class="bi bi-exclamation-circle me-2"></i> No selected
+                    </div>
+                  </div>
+                  <div th:if="${!#lists.isEmpty(entry.value)}">
+                    <div th:each="c : ${entry.value}">
+                      <div class="d-flex align-items-center mt-2 choice-item">
+                        <input
+                                type="text"
+                                class="form-control me-2"
+                                th:value="${choiceC.get(c)}"
+                                th:style="${question.getChoices().contains(c)} ? 'border: 2px solid darkgreen' : ''" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End ForEach -->
+    </div>
+  </div>
+</main>
+
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+</body>
+</html>

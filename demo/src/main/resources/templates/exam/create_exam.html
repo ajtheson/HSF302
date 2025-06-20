@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/head :: headload}"></th:block>
+    <title>Exam Create</title>
+</head>
+<body class="app sidebar-mini">
+<th:block th:replace="fragments/teacher_sidebar :: sidebar"></th:block>
+<main class="app-content">
+    <div class="app-title" style="position: sticky; top: 52px; z-index: 1020">
+        <div>
+            <h1><i class="bi bi-laptop"></i> Exams</h1>
+            <p>An online web for creating and taking exams</p>
+        </div>
+        <div th:if="${quizEmpty != null}"
+             style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 5px; border: 1px solid #f5c6cb; display: flex; align-items: center; justify-content: space-between; gap: 10px; width: fit-content; font-weight: bold;">
+            <span th:text="${quizEmpty}"></span>
+            <button th:onclick="|location.href='@{/quiz/create}'|"
+                    style="background-color: #721c24; color: white; border: none; padding: 6px 12px; border-radius: 3px; cursor: pointer; font-weight: bold;">
+                Create New Quiz
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="tile" style="position: sticky; top: 170px ;z-index: 1010">
+                <label for="search" class="mb-2">Search by name:</label>
+                <form th:action="@{/exam/create}" method="get">
+                    <input type="hidden" name="method" value="search">
+                    <div class="input-group mb-2">
+                        <input id="search" type="search" name="name" class="form-control form-control-sm" placeholder="Enter quiz name" required/>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <button id="reset-search" class="btn btn-secondary w-100 mb-3" th:onclick="|location.href='@{/exam/create(method=view)}'|">
+                    Show All Quizzes
+                </button>
+                <ul class="list-group mt-3">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <i class="bi bi-check-square"></i> Available Quiz
+                        <span class="badge bg-secondary" th:text="${validQuiz}"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <i class="bi bi-check-circle"></i> Used in Tests
+                        <span class="badge bg-secondary" th:text="${usedQuiz}"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <i class="bi bi-hourglass-split"></i> Not Used in Tests
+                        <span class="badge bg-secondary" th:text="${totalQuiz - usedQuiz}"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div th:each="quiz : ${quizzes}" class="tile d-flex align-items-center">
+                <img th:src="@{/images/quiz-logo.png}" alt="Quiz Image" class="rounded me-3" width="100" height="100"/>
+                <div class="w-100">
+                    <div class="tile-title-w-btn d-flex justify-content-between align-items-center">
+                        <h3 class="title" th:text="${quiz.quizName}"></h3>
+                        <div class="btn-group">
+                            <a class="btn btn-primary" style="width: 140px"
+                               th:href="@{/quiz/manager(method='see', quizid=${quiz.quizId})}">
+                                <i class="bi bi-file-text fs-5"></i> View Quiz
+                            </a>
+                            <a class="btn btn-success" style="width: 140px" data-bs-toggle="modal" data-bs-target="#createExamModal">
+                                <i class="bi bi-plus-square fs-5"></i> Create Exam
+                            </a>
+                            <div class="modal fade" th:id="createExamModal" tabindex="-1" aria-labelledby="createExamModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Create Exam</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form th:action="@{/exam/create}" method="post">
+                                                <input type="hidden" name="quizid" th:value="${quiz.quizId}"/>
+                                                <div class="mb-3">
+                                                    <label for="examName" class="form-label">Exam Name</label>
+                                                    <input type="text" class="form-control" id="examName" name="examName" required/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="duration" class="form-label">Duration (minutes)</label>
+                                                    <input type="number" class="form-control" id="duration" name="duration" min="1" required/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="startTime" class="form-label">Start Time</label>
+                                                    <input type="datetime-local" class="form-control" id="startTime" name="startTime" required/></div>
+                                                <div class="mb-3">
+                                                    <label for="endTime" class="form-label">End Time</label>
+                                                    <input type="datetime-local" class="form-control" id="endTime" name="endTime" required/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="attempts" class="form-label">Number of Attempts</label>
+                                                    <input type="number" class="form-control" id="attempts" name="attempts" min="1" required/>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="isReview" name="isReview" value="true"/>
+                                                        <label class="form-check-label" for="isReview">Allow Review</label>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary w-100">Create Exam</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tile-body">
+                        <p class="card-text mb-3">
+                            <i class="bi bi-question-circle"></i> Questions: <span th:text="${quiz.quantity}"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+<script th:src="@{/js/exam-create.js}"></script>
+</body>
+</html>

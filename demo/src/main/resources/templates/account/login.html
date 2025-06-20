@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{fragments/head :: headload}"></th:block>
+    <title>Login</title>
+</head>
+<body>
+<section class="material-half-bg">
+    <div class="cover"></div>
+</section>
+<section class="login-content">
+    <div class="logo">
+        <h1>Quiz Online System</h1>
+    </div>
+    <div class="login-box" style="min-height: 535px">
+        <form class="login-form" th:action="@{/account/login}" method="post">
+            <h3 class="login-head">
+                <i class="bi bi-person me-2"></i>Sign in
+            </h3>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input class="form-control" type="text" placeholder="Email" autofocus name="email" required
+                       th:value="${email}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input class="form-control" type="password" placeholder="Password" name="password" required
+                       th:value="${password}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Role</label>
+                <select class="form-select" name="role">
+                    <option value="teacher" th:selected="${role == 'teacher'}">Teacher</option>
+                    <option value="student" th:selected="${role == 'student'}">Student</option>
+                </select>
+            </div>
+            <p class="semibold-text mb-2" style="text-align: center">
+                Forgot your password? <a th:href="@{/account/forgot}">Reset it here</a>
+            </p>
+            <!-- Notification -->
+            <div class="mb-3">
+                <p style="color: red; text-align: center;" th:text="${loginError}"></p>
+                <p style="color: red; text-align: center;" th:text="${registerError}"></p>
+                <p style="color: red; text-align: center;" th:text="${changePasswordError}"></p>
+                <p style="color: red; text-align: center;" th:text="${errFirstLogin}"></p>
+                <p style="color: green; text-align: center;" th:text="${successRegister}"></p>
+                <p style="color: green; text-align: center;" th:text="${successChange}"></p>
+            </div>
+            <!-- End notification -->
+            <div class="mb-3 btn-container d-grid">
+                <button class="btn btn-primary btn-block" type="submit">
+                    <i class="bi bi-box-arrow-in-right me-2 fs-5"></i>Sign in
+                </button>
+            </div>
+            <p class="semibold-text mb-2" style="text-align: center">
+                Don't have an account ? <a th:href="@{/account/register}">Sign up</a>
+            </p>
+        </form>
+    </div>
+</section>
+
+<!-- Include jsload fragment -->
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/head :: headload}"></th:block>
+    <title>Completed Exam</title>
+</head>
+<body class="app sidebar-mini">
+<th:block th:replace="fragments/teacher_sidebar :: sidebar"></th:block>
+
+<main class="app-content">
+    <div class="app-title" style="position: sticky; top: 52px; z-index: 1020">
+        <div>
+            <h1><i class="bi bi-laptop"></i> Exams</h1>
+            <p>An online web for creating and taking exams</p>
+        </div>
+
+        <div th:if="${examEmpty != null}"
+             style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 5px; border: 1px solid #f5c6cb; display: flex; align-items: center; justify-content: space-between; gap: 10px; width: fit-content; font-weight: bold;">
+            <span th:text="${examEmpty}"></span>
+            <button onclick="location.href='create?method=view'"
+                    style="background-color: #721c24; color: white; border: none; padding: 6px 12px; border-radius: 3px; cursor: pointer; font-weight: bold;">
+                Create New Exam
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="tile" style="position: sticky; top: 170px; z-index: 1010">
+                <label for="search" class="mb-2">Search by name:</label>
+                <form th:action="@{/exam/completed}" method="get">
+                    <input type="hidden" name="method" value="search"/>
+                    <div class="input-group mb-2">
+                        <input id="search" type="search" name="name"
+                               class="form-control form-control-sm"
+                               placeholder="Enter exam name" required />
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <button id="reset-search" class="btn btn-secondary w-100 mb-3"
+                        onclick="location.href='/exam/completed?method=view'">
+                    Show All Exams
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div th:each="exam : ${exams}" class="tile d-flex align-items-center">
+                <img th:src="@{/images/exam-logo.png}" alt="Exam Image"
+                     class="rounded me-3" width="120" height="120"/>
+
+                <div class="w-100">
+                    <div class="tile-title-w-btn d-flex justify-content-between align-items-center">
+                        <h3 class="title" th:text="${exam.examName}"></h3>
+                        <div class="btn-group">
+                            <a class="btn btn-info"
+                               th:href="@{/quiz/manager(method='see', quizid=${exam.quiz.quizId}, only_see='yes')}"
+                               style="width: 120px">
+                                <i class="bi bi-question-circle fs-5"></i> Quiz
+                            </a>
+                            <a class="btn btn-warning"
+                               th:href="@{/exam/result(method='view', examid=${exam.examId})}"
+                               style="width: 120px">
+                                <i class="bi bi-clipboard-data fs-5"></i> Result
+                            </a>
+                            <a class="btn btn-secondary"
+                               th:href="@{/exam/statistic(examID=${exam.examId})}"
+                               style="width: 120px">
+                                <i class="bi bi-graph-up fs-5"></i> Statistic
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tile-body">
+                        <p class="card-text mb-2">
+                            <i class="bi bi-clock"></i> Duration: <span th:text="${exam.duration}"></span> minutes
+                        </p>
+                        <p class="card-text mb-2">
+                            <i class="bi bi-calendar-check"></i> Start Time: <span th:text="${exam.startTime}"></span>
+                        </p>
+                        <p class="card-text mb-2">
+                            <i class="bi bi-calendar-x"></i> End Time: <span th:text="${exam.endTime}"></span>
+                        </p>
+                        <p class="card-text mb-2">
+                            <i th:class="'bi ' + (${exam.isReview} ? 'bi-eye' : 'bi-eye-slash')"></i> Allow Review:
+                            <span th:text="${exam.isReview} ? 'Yes' : 'No'"></span>
+                            <a th:href="@{/exam/toggle_review(from='com', examid=${exam.examId})}"
+                               th:class="'ms-2 ' + (${exam.isReview} ? 'text-danger' : 'text-success')"
+                               style="text-decoration: none; font-weight: bold;">
+                                [<span th:text="${exam.isReview} ? 'Disable' : 'Enable'"></span>]
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+</body>
+</html>

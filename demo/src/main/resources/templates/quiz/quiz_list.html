@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/head :: headload}"></th:block>
+    <title>Quiz Manager</title>
+</head>
+<body class="app sidebar-mini">
+<th:block th:replace="fragments/teacher_sidebar :: sidebar"></th:block>
+<main class="app-content">
+    <div class="app-title" style="position: sticky; top: 52px; z-index: 1020">
+        <div>
+            <h1><i class="bi bi-laptop"></i> Quizzes</h1>
+            <p>An online web for creating and taking exams</p>
+        </div>
+
+        <div th:if="${successQuizCreate != null or successQuizRemove != null or successQuizUpdate != null}"
+             style="background-color: #e6f9e6; color: #2e7d32; padding: 10px; border-radius: 5px; border: 1px solid #2e7d32; width: fit-content; font-weight: bold;">
+            <span th:text="${successQuizCreate}"></span>
+            <span th:text="${successQuizRemove}"></span>
+            <span th:text="${successQuizUpdate}"></span>
+        </div>
+
+        <div th:if="${quizEmpty != null}"
+             style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 5px; border: 1px solid #f5c6cb; display: flex; align-items: center; justify-content: space-between; gap: 10px; width: fit-content; font-weight: bold;">
+            <span th:text="${quizEmpty}"></span>
+            <button onclick="location.href='/quiz/create'"
+                    style="background-color: #721c24; color: white; border: none; padding: 6px 12px; border-radius: 3px; cursor: pointer; font-weight: bold;">
+                Create New Quiz
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="tile" style="position: sticky; top: 170px; z-index: 1010">
+                <label for="search" class="mb-2">Search by name:</label>
+                <form th:action="@{/quiz/manager}" method="get">
+                    <input type="hidden" name="method" value="search"/>
+                    <div class="input-group mb-2">
+                        <input id="search" type="search" name="name"
+                               class="form-control form-control-sm"
+                               placeholder="Enter quiz name"
+                               required/>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <a th:href="@{/quiz/manager(method='view')}">
+                <button id="reset-search" class="btn btn-secondary w-100 mb-3">
+                    Show All Quizzes
+                </button>
+                </a>
+
+                <ul class="list-group mt-3">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <i class="bi bi-file-earmark-text"></i> Total Created
+                        <span class="badge bg-secondary" th:text="${totalQuiz}"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <i class="bi bi-check-square"></i> Available Quiz
+                        <span class="badge bg-secondary" th:text="${validQuiz}"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <i class="bi bi-check-circle"></i> Used in Tests
+                        <span class="badge bg-secondary" th:text="${usedQuiz}"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <i class="bi bi-hourglass-split"></i> Not Used in Tests
+                        <span class="badge bg-secondary" th:text="${totalQuiz - usedQuiz}"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <i class="bi bi-trash"></i> Deleted
+                        <span class="badge bg-secondary" th:text="${totalQuiz - validQuiz}"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div th:each="quiz : ${quizzes}" class="tile d-flex align-items-center mb-3">
+                <img th:src="@{/images/quiz-logo.png}"
+                     alt="Quiz Image" class="rounded me-3" width="120" height="120"/>
+
+                <div class="w-100">
+                    <div class="tile-title-w-btn d-flex justify-content-between align-items-center">
+                        <h3 class="title" th:text="${quiz.quizName}"></h3>
+                        <div class="btn-group">
+                            <a class="btn btn-primary"
+                               th:href="@{/quiz/manager(method='see', quizid=${quiz.quizId})}">
+                                <i class="bi bi-file-text fs-5"></i>
+                            </a>
+                            <a class="btn btn-primary"
+                               th:href="@{/quiz/manager(method='edit', quizid=${quiz.quizId})}">
+                                <i class="bi bi-pencil-square fs-5"></i>
+                            </a>
+                            <a class="btn btn-primary"
+                               th:href="@{/quiz/manager(method='remove', quizid=${quiz.quizId})}"
+                               onclick="return confirm('Are you sure you want to remove this quiz?');">
+                                <i class="bi bi-trash fs-5"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="tile-body">
+                        <p class="card-text mb-3">
+                            <i class="bi bi-question-circle"></i> Questions:
+                            <span th:text="${quiz.quantity}"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+</body>
+</html>

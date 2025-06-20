@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{fragments/head :: headload}"></th:block>
+
+  <link rel="stylesheet" th:href="@{/css/exam-taking.css}">
+  <meta id="quizDurationMeta" th:attr="data-duration=${exam != null ? exam.duration : 0}" />
+  <title>Exam Taking</title>
+</head>
+<body>
+<div class="header">
+  <div class="quiz-title" th:text="${exam.examName}">Quiz Name</div>
+  <div style="color: red; font-size: 16px; text-align: center; background-color: white; padding: 10px; display: block;">
+    If you exit fullscreen or change tab, your quiz will be submitted automatically.
+  </div>
+  <div class="countdown-container">
+    <span id="countdown"></span>
+    <button type="button" id="submitBtn">Submit</button>
+  </div>
+</div>
+
+<div class="form-container">
+  <form id="quizForm" th:action="@{/exam/take}" method="post">
+    <div th:each="question, index : ${quiz.questions}">
+      <div class="question-box">
+        <p class="question-title" th:text="'Question ' + ${index.count} + ':'">Question 1:</p>
+        <p class="answer" th:text="${question.content}">Question content</p>
+
+        <!-- Radio buttons for single choice -->
+        <div th:if="${!question.multipleChoice}">
+          <label class="option" th:each="choice : ${question.choices}">
+            <input type="radio"
+                   th:name="${question.questionId}"
+                   th:value="${choice.choiceId}" />
+            <span th:text="${choice.choiceContent}">Choice A</span>
+          </label>
+        </div>
+
+        <!-- Checkbox for multiple choice -->
+        <div th:if="${question.multipleChoice}">
+          <label class="option" th:each="choice : ${question.choices}">
+            <input type="checkbox"
+                   th:name="${question.questionId}"
+                   th:value="${choice.choiceId}" />
+            <span th:text="${choice.choiceContent}">Choice A</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <input type="hidden" name="duration" id="hiddenDuration" value="0" />
+  </form>
+</div>
+
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+
+<script th:inline="javascript">
+  var submissionID = /*[[${submissionID}]]*/ "";
+</script>
+<script th:src="@{/js/exam-taking.js}"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{fragments/head :: headload}"></th:block>
+<title>Student Setting</title>
+</head>
+<body class="app sidebar-mini">
+<th:block th:replace="fragments/student_sidebar :: sidebar"></th:block>
+<main class="app-content">
+  <div class="row user">
+    <div class="col-md-3">
+      <div class="tile p-0">
+        <ul class="nav flex-column nav-tabs user-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#user-timeline" data-bs-toggle="tab">Change Password</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#user-settings" data-bs-toggle="tab">Update Profile</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="tab-content">
+        <!-- Change Password Tab -->
+        <div class="tab-pane active" id="user-timeline">
+          <div class="tile user-settings">
+            <h4 class="line-head">Change Password</h4>
+            <form th:action="@{/setting/student(mode='password')}" method="post">
+              <div class="row">
+                <div class="col-md-8 mb-4">
+                  <label>Email</label>
+                  <input class="form-control" type="text" th:value="${session.account.email}" readonly/>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-8 mb-4">
+                  <label>Old Password</label>
+                  <input class="form-control" type="password" name="old_password" required/>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-md-4">
+                  <label>New Password</label>
+                  <input class="form-control" type="password" name="new_password" required/>
+                </div>
+                <div class="col-md-4">
+                  <label>Confirm password</label>
+                  <input class="form-control" type="password" name="re_password" required/>
+                </div>
+              </div>
+              <p style="color: red" th:text="${changeError}"></p>
+              <p style="color: red" th:text="${passwordError}"></p>
+              <p style="color: green" th:text="${passwordSuccess}"></p>
+              <p style="color: red" th:text="${profileError}"></p>
+              <p style="color: green" th:text="${profileSuccess}"></p>
+              <div class="row mb-10">
+                <div class="col-md-12">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-check-circle-fill me-2"></i> Save
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Update Profile Tab -->
+        <div class="tab-pane fade" id="user-settings">
+          <div class="tile user-settings">
+            <h4 class="line-head">Profile</h4>
+            <form th:action="@{/setting/student(mode='profile')}" method="post">
+              <div class="row">
+                <div class="col-md-8 mb-4">
+                  <label>Email</label>
+                  <input class="form-control" type="text" th:value="${session.account.email}" readonly/>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-8 mb-4">
+                  <label>Full Name</label>
+                  <input class="form-control" type="text" name="fullname" required th:value="${session.account.fullName}"/>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-8 mb-4">
+                  <label>Class</label>
+                  <input class="form-control" type="text" name="className" required th:value="${session.account.className}"/>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-8 mb-4">
+                  <label>School</label>
+                  <input class="form-control" type="text" name="school" required th:value="${session.account.school}"/>
+                </div>
+              </div>
+              <div class="row mb-10">
+                <div class="col-md-12">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-check-circle-fill me-2"></i> Save
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+</body>
+</html>

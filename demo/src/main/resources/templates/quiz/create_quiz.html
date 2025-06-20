@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{fragments/head :: headload}"></th:block>
+  <title>Quiz Manager</title>
+</head>
+<body class="app sidebar-mini">
+<th:block th:replace="fragments/teacher_sidebar :: sidebar"></th:block>
+
+<main class="app-content">
+  <div class="app-title" style="position: sticky; top: 52px; z-index: 1020">
+    <div>
+      <h1><i class="bi bi-plus-circle"></i> Create New Quiz</h1>
+      <p>An online web for creating and taking exams</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <form
+            th:action="@{/quiz/create}"
+            method="post"
+            onsubmit="return validateQuiz()"
+    >
+      <div class="tile">
+        <h3 class="tile-title">New Quiz</h3>
+        <div class="tile-body">
+          <div id="form-error" class="text-danger mb-3"></div>
+          <div class="row">
+            <div class="col mb-3">
+              <label class="form-label">Quiz Name</label>
+              <input
+                      type="text"
+                      class="form-control"
+                      name="quizName"
+                      placeholder="Enter quiz name"
+                      required
+              />
+            </div>
+          </div>
+          <div id="questions-container"></div>
+        </div>
+        <div class="tile-footer d-flex">
+          <button
+                  class="btn btn-primary me-2"
+                  type="button"
+                  onclick="addQuestion()"
+                  style="width: 150px"
+          >
+            <i class="bi bi-plus-lg me-1"></i> Add Question
+          </button>
+          <button
+                  class="btn btn-success"
+                  type="submit"
+                  style="width: 150px"
+          >
+            <i class="bi bi-save me-1"></i> Save Quiz
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>
+
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+<script th:src="@{/js/quiz-create.js}"></script>
+</body>
+</html>

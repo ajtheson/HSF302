@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Activate</title>
+    <th:block th:replace="~{fragments/head :: headload}"></th:block>
+</head>
+<body>
+<section class="material-half-bg">
+    <div class="cover"></div>
+</section>
+
+<section class="login-content">
+    <div class="logo">
+        <h1>Quiz Online System</h1>
+    </div>
+
+    <div class="login-box" style="min-height: 380px">
+        <form class="login-form" th:action="@{/account/activate}" method="post">
+
+            <!-- Tiêu đề -->
+            <h3 class="login-head">
+                <i class="bi bi-person me-2"></i>
+                <span th:if="${session.mode == 'student_forgot' or session.mode == 'teacher_forgot'}">Change password</span>
+                <span th:if="${session.mode == 'student_register' or session.mode == 'teacher_register'}">Activate your account</span>
+            </h3>
+
+            <!-- Nhập OTP -->
+            <div class="mb-3">
+                <label class="form-label">Enter OTP code:</label>
+                <input class="form-control" type="text" placeholder="Your OTP" name="otp" required autofocus>
+            </div>
+
+            <!-- Thông báo -->
+            <div class="mb-3">
+                <p style="color: green; text-align: center" th:text="${activateAlert}"></p>
+                <p style="color: red; text-align: center" th:text="${failOTP}"></p>
+            </div>
+
+            <!-- Nút xử lý -->
+            <div class="mb-3 btn-container d-grid" th:if="${session.mode == 'student_register' or session.mode == 'teacher_register'}">
+                <button class="btn btn-primary btn-block" type="submit">
+                    <i class="bi bi-check-lg me-2 fs-5"></i>Activate
+                </button>
+            </div>
+            <div class="mb-3 btn-container d-grid" th:if="${session.mode == 'student_forgot' or session.mode == 'teacher_forgot'}">
+                <button class="btn btn-primary btn-block" type="submit">
+                    <i class="bi bi-check-lg me-2 fs-5"></i>Change password
+                </button>
+            </div>
+
+            <!-- Nút gửi lại OTP -->
+            <div class="mb-3 btn-container d-grid">
+                <a class="btn btn-secondary btn-block" th:href="@{/account/resend_otp}">
+                    <i class="bi bi-check-lg me-2 fs-5"></i>Resend OTP
+                </a>
+            </div>
+        </form>
+    </div>
+</section>
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+</body>
+</html>

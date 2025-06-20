@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Database Error</title>
+    <th:block th:replace="~{fragments/head :: headload}"></th:block>
+</head>
+<body class="app sidebar-mini">
+<!-- Sidebar cho giáo viên -->
+<th:block th:replace="fragments/teacher_sidebar :: sidebar"></th:block>
+
+<main class="app-content">
+    <div class="page-error tile">
+        <h1 class="text-danger">
+            <i class="bi bi-exclamation-triangle"></i> Error: Database Execution Failed
+        </h1>
+        <p>An error occurred while executing the statement on the database.</p>
+        <p>Please check your input data or try again later.</p>
+        <p>
+            <a class="btn btn-primary" href="javascript:window.history.back();">Go Back</a>
+        </p>
+    </div>
+</main>
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+</body>
+</html>

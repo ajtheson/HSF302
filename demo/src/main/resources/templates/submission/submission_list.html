@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{fragments/head :: headload}"></th:block>
+  <title>Exam Result</title>
+</head>
+<body class="app sidebar-mini">
+<!-- Sidebar cho student -->
+<th:block th:replace="fragments/student_sidebar :: sidebar"/>
+
+<main class="app-content">
+  <div class="app-title" style="position: sticky; top: 52px; z-index: 1020">
+    <div>
+      <h1><i class="bi bi-laptop"></i> Submitted Exams</h1>
+      <p>An online web for creating and taking exams</p>
+    </div>
+
+    <div th:if="${#lists.isEmpty(submissions)}"
+         style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 5px; border: 1px solid #f5c6cb; display: flex; align-items: center; justify-content: space-between; gap: 10px; width: fit-content; font-weight: bold;">
+      <span>No have any submitted</span>
+      <button th:onclick="|location.href='@{/exam/join(method='search')}'|"
+              style="background-color: #721c24; color: white; border: none; padding: 6px 12px; border-radius: 3px; cursor: pointer; font-weight: bold;">
+        Join Exam Now
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Sidebar trái -->
+    <div class="col-md-3">
+      <div class="tile" style="position: sticky; top: 170px; z-index: 1010">
+        <label for="search" class="mb-2">Search by exam name:</label>
+        <form th:action="@{/submission/list}" method="get">
+          <input type="hidden" name="method" value="search"/>
+          <div class="input-group mb-2">
+            <input id="search" type="search" name="name" class="form-control form-control-sm"
+                   placeholder="Enter exam name" required/>
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+
+        <button id="reset-search" class="btn btn-secondary w-100 mb-3"
+                th:onclick="|location.href='@{/submission/list(method='view')}'|">
+          Show All Submissions
+        </button>
+
+        <ul class="list-group mt-3">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <i class="bi bi-file-earmark-text"></i> Total Submission
+            <span class="badge bg-secondary" th:text="${totalSubmission}"></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <i class="bi bi-bar-chart"></i> Average Score
+            <span class="badge bg-secondary" th:text="${averageScore}"></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <i class="bi bi-trophy"></i> Highest Score
+            <span class="badge bg-secondary" th:text="${highestScore}"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Danh sách bài nộp -->
+    <div class="col-md-9">
+      <div class="tile">
+        <div style="display: flex; justify-content: space-between">
+          <h3 class="tile-title" th:text="${session.account.fullName}">Student Name</h3>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center"
+                    th:onclick="|location.href='@{/submission/list(method='newest')}'|">
+              <i class="bi bi-sort-up me-2"></i> Newest
+            </button>
+            <button class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center"
+                    th:onclick="|location.href='@{/submission/list(method='oldest')}'|">
+              <i class="bi bi-sort-down me-2"></i> Oldest
+            </button>
+          </div>
+        </div>
+
+        <table class="table">
+          <thead>
+          <tr>
+            <th></th>
+            <th>Exam Name</th>
+            <th>Submit Time</th>
+            <th>Duration</th>
+            <th>Score</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="s, index : ${submissions}">
+            <td th:text="${index.count}"></td>
+            <td th:text="${examName[s.submissionId]}"></td>
+            <td th:text="${s.submitTime}"></td>
+            <td th:text="${s.duration + ' minutes'}"></td>
+            <td th:text="${s.score}"></td>
+            <td>
+              <a th:href="@{/submission/result(submissionid=${s.submissionId})}" class="btn btn-primary">View</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- JS -->
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+</body>
+</html>

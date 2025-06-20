@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{fragments/head :: headload}"></th:block>
+  <title>Exam Statistic</title>
+</head>
+<body class="app sidebar-mini">
+<th:block th:replace="fragments/student_sidebar :: sidebar"></th:block>
+
+<main class="app-content">
+  <div class="app-title" style="position: sticky; top: 52px; z-index: 1020">
+    <div>
+      <h1><i class="bi bi-plus-circle"></i> Take Exam</h1>
+      <p>An online web for creating and taking exams</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <form th:action="@{/exam/join}" method="get">
+        <div class="input-group mb-3" style="height: 50px; position: relative;">
+          <input type="hidden" name="method" value="join">
+          <input type="text"
+                 class="form-control rounded-pill shadow-lg"
+                 placeholder="Enter Exam Code"
+                 required
+                 style="height: 100%; padding-right: 80px;"
+                 name="examCode">
+          <button type="submit"
+                  class="btn btn-primary rounded-pill"
+                  style="position: absolute; right: 5px; top: 5px; height: 40px; border-top-left-radius: 20px; border-bottom-left-radius: 20px; display: block;">
+            Join
+          </button>
+        </div>
+      </form>
+
+      <div class="text-danger text-center mt-2" th:if="${codeNotFound != null}" th:text="${codeNotFound}"></div>
+    </div>
+  </div>
+</main>
+
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+</body>
+</html>

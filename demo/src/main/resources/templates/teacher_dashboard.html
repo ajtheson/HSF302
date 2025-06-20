@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{fragments/head :: headload}"></th:block>
+<title>Teacher Dashboard</title>
+</head>
+<body class="app sidebar-mini">
+<th:block th:replace="fragments/teacher_sidebar :: sidebar"></th:block>
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="bi bi-speedometer"></i> Dashboard</h1>
+            <p>An online web for creating and taking exams</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-small primary coloured-icon">
+                <i class="icon bi bi-card-list fs-1"></i>
+                <div class="info">
+                    <h4>Quizzes</h4>
+                    <p><b th:text="${numberOfQuizzes}">0</b></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-small info coloured-icon">
+                <i class="icon bi bi-file-earmark-text fs-1"></i>
+                <div class="info">
+                    <h4>Exams</h4>
+                    <p><b th:text="${numberOfExams}">0</b></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-small warning coloured-icon">
+                <i class="icon bi bi-hourglass-split fs-1"></i>
+                <div class="info">
+                    <h4>On going</h4>
+                    <p><b>0</b></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3" >
+            <div class="widget-small danger coloured-icon">
+                <i class="icon bi bi-send fs-1"></i>
+                <div class="info">
+                    <h4>Submissions</h4>
+                    <p><b>0</b></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">Weekly Submissions - Last week</h3>
+                <div class="ratio ratio-16x9">
+                    <div id="salesChart"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">Exams Record</h3>
+                <div class="ratio ratio-16x9">
+                    <div id="supportRequestChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Essential javascripts -->
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+
+<!-- Page specific javascripts -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script th:inline="javascript">
+    const salesData = {
+        xAxis: {
+            type: "category",
+            data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        },
+        yAxis: {
+            type: "value",
+            axisLabel: {
+                formatter: "{value}",
+            },
+        },
+        series: [
+            {
+                data: [40, 10, 50, 33, 55, 74, 70],
+                type: "line",
+                smooth: true,
+            },
+        ],
+        tooltip: {
+            trigger: "axis",
+            formatter: "<b>{b0}:</b> {c0}",
+        },
+    };
+
+    const supportRequests = {
+        tooltip: {trigger: "item"},
+        legend: {orient: "vertical", left: "left"},
+        series: [
+            {
+                name: "Exam",
+                type: "pie",
+                radius: "50%",
+                data: [
+                    {value: 1, name: "In Progress"},
+                    {value: 1, name: "Complete"},
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: "rgba(0, 0, 0, 0.5)",
+                    },
+                },
+            },
+        ],
+    };
+
+    const salesChartElement = document.getElementById("salesChart");
+    const salesChart = echarts.init(salesChartElement, null, {renderer: "svg"});
+    salesChart.setOption(salesData);
+    new ResizeObserver(() => salesChart.resize()).observe(salesChartElement);
+
+    const supportChartElement = document.getElementById("supportRequestChart");
+    const supportChart = echarts.init(supportChartElement, null, {renderer: "svg"});
+    supportChart.setOption(supportRequests);
+    new ResizeObserver(() => supportChart.resize()).observe(supportChartElement);
+</script>
+</body>
+</html>

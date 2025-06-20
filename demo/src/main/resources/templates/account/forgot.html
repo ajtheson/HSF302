@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Forgot</title>
+    <th:block th:replace="~{fragments/head :: headload}"></th:block>
+</head>
+<body>
+<section class="material-half-bg">
+    <div class="cover"></div>
+</section>
+<section class="login-content">
+    <div class="logo">
+        <h1>Quiz Online System</h1>
+    </div>
+
+    <div th:if="${changeRole == null}">
+        <div class="login-box" style="min-height: 400px">
+            <form class="login-form" action="/account/forgot" method="post">
+                <h3 class="login-head"><i class="bi bi-person-lock me-2"></i>Forgot password ?</h3>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input class="form-control" type="text" placeholder="Email" required name="email"
+                           th:value="${email}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Role</label>
+                    <select class="form-select" name="role">
+                        <option value="teacher"
+                                th:selected="${role == 'teacher'}">Teacher</option>
+                        <option value="student"
+                                th:selected="${role == 'student'}">Student</option>
+                    </select>
+                </div>
+                <!--Notification-->
+                <div class="mb-3">
+                    <p style="color: red; text-align: center" th:text="${forgotError}"></p>
+                </div>
+                <!--End notification-->
+                <div class="mb-3 btn-container d-grid">
+                    <button class="btn btn-primary btn-block" type="submit">
+                        <i class="bi bi-unlock me-2 fs-5"></i>Reset
+                    </button>
+                </div>
+                <div class="mb-3 mt-3">
+                    <p class="semibold-text mb-0" style="text-align: center">
+                        <a href="/account/login"><i class="bi bi-chevron-left me-1"></i> Back to Login</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div th:if="${changeRole != null}">
+        <div class="login-box" style="min-height: 400px">
+            <form class="login-form" action="/account/change_password" method="post">
+                <h3 class="login-head"><i class="bi bi-person-lock me-2"></i> Change password</h3>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input class="form-control" type="password" placeholder="Password" name="password" required
+                           th:value="${password}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Confirm password</label>
+                    <input class="form-control" type="password" placeholder="Confirm Password" name="repassword" required
+                           th:value="${repassword}">
+                </div>
+                <input type="hidden" name="role" th:value="${changeRole}">
+                <!--Notification-->
+                <div class="mb-3">
+                    <p style="color: red; text-align: center" th:text="${changeError}"></p>
+                </div>
+                <!--End notification-->
+                <div class="mb-3 btn-container d-grid">
+                    <button class="btn btn-primary btn-block" type="submit">
+                        <i class="bi bi-unlock me-2 fs-5"></i>Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<!-- Include jsload fragment -->
+<div th:replace="~{fragments/jsload :: jsload}"></div>
+</body>
+</html>
