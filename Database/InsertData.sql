@@ -2,16 +2,16 @@
 use QuizOnlineSystem
 -- Insert Teachers
 INSERT INTO teacher_entity(email, password, full_name, school) VALUES
-('nguyentheson27102005@gmail.com', 'bd94dcda26fccb4e68d6a31f9b5aac0b571ae266d822620e901ef7ebe3a11d4f', 'Nguyen Van A', 'High School A'),
-('teacher2@example.com', 'pass456', 'Tran Thi B', 'High School B');
+('teacher1@example.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', 'Nguyen Van A', 'High School A'),
+('teacher2@example.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', 'Tran Thi B', 'High School B');
 
 -- Insert Students
 INSERT INTO student_entity(email, password, full_name, class_name, school) VALUES
-('nguyentheson27102005@gmail.com', 'bd94dcda26fccb4e68d6a31f9b5aac0b571ae266d822620e901ef7ebe3a11d4f', 'Le Van C', '12A1', 'High School A'),
-('student2@example.com', 'pass456', 'Pham Thi D', '12A2', 'High School B'),
-('student3@example.com', 'pass789', 'Nguyen Van E', '12A3', 'High School C'),
-('student4@example.com', 'pass012', 'Tran Thi F', '12A4', 'High School D'),
-('student5@example.com', 'pass345', 'Hoang Van G', '12A1', 'High School A');
+('student1@example.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', 'Le Van C', '12A1', 'High School A'),
+('student2@example.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', 'Pham Thi D', '12A2', 'High School B'),
+('student3@example.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', 'Nguyen Van E', '12A3', 'High School C'),
+('student4@example.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', 'Tran Thi F', '12A4', 'High School D'),
+('student5@example.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', 'Hoang Van G', '12A1', 'High School A');
 
 -- Insert Quizzes
 INSERT INTO quiz_entity (quiz_name, quantity, is_deleted, teacher_id) VALUES
